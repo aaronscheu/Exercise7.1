@@ -15,9 +15,9 @@ public class Graph {
 
     private final int MAX_WEIGHT = 50;
 
-    public Graph(int nrOfvertecies) {
-        this.adjacency = new LinkedList[nrOfvertecies];
-        this.labels = new String[nrOfvertecies];
+    public Graph(int nrOfvertices) {
+        this.adjacency = new LinkedList[nrOfvertices];
+        this.labels = new String[nrOfvertices];
 
         for (int i = 0; i < adjacency.length; i++) {
             adjacency[i] = new LinkedList<>();
