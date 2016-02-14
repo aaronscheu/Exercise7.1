@@ -57,7 +57,10 @@ public class Graph {
 
     public void pathfinder(int start, int end) {
         dist[start] = 0;
+        ArrayList<Integer> queue = new ArrayList<>();
 
+
+        queue.add(start);
         /*
         insert start into Q
 
