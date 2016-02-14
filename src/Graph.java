@@ -55,12 +55,40 @@ public class Graph {
         return adjacency[startVertex].remove(edge);
     }
 
-    public void pathfinder(int start, int end) {
+
+    /**
+     * Get all Neighbours from vertex as sorted List.
+     * @param vertex -> Origin Vertex
+     * @param pos    -> Position of closes Neighbour; pos 0 for closest; pos 1 for second closest; ...
+     * @return       -> Integer of Vertex Index
+     */
+    private int getNeighbour(int vertex, int pos) {
+
+        ArrayList<Pair> sorted = new ArrayList<>(
+                adjacency[vertex]
+                .stream()
+                .sorted( (e1, e2) -> Integer.compare(e1.getValue(), e2.getValue()))
+                .collect(Collectors.toList())
+        );
+
+        return (int) sorted.get(pos).getKey();
+    }
+
+    private int getClosestNeighbour(int vertex) {
+        return getNeighbour(vertex, 0);
+    }
+
+
+
+
+    public void pathfinder(int start, int end, boolean shortest) {
         dist[start] = 0;
         ArrayList<Integer> queue = new ArrayList<>();
 
 
         queue.add(start);
+
+
         /*
         insert start into Q
 
