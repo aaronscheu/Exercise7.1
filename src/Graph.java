@@ -13,24 +13,11 @@ public class Graph {
     private List<Pair<Integer, Integer>>[] adjacency;
     private String[] labels;
 
-    //Pathfinding
-    private int[] dist;
-    private boolean[] visited;
-    private int[] previous;
-
     private final int MAX_WEIGHT = 50;
 
     public Graph(int nrOfvertices) {
         this.adjacency = new LinkedList[nrOfvertices];
         this.labels = new String[nrOfvertices];
-
-        this.dist = new int[nrOfvertices];
-        this.previous = new int[nrOfvertices];
-        this.visited = new boolean[nrOfvertices];
-        Arrays.fill(dist, Integer.MAX_VALUE);
-        Arrays.fill(visited, false);
-        Arrays.fill(previous, -1);
-
 
         for (int i = 0; i < adjacency.length; i++) {
             adjacency[i] = new LinkedList<>();
@@ -78,38 +65,70 @@ public class Graph {
         return getNeighbour(vertex, 0);
     }
 
+    private int getMinDistNotVisited(int[] dist, boolean[] visited) {
+        // Initialize min value
+        int min = Integer.MAX_VALUE;
+        int min_index = -1;
+
+        for (int i = 0; i < dist.length; i++)
+
+            if (!visited[i] && dist[i] <= min) {
+                min = dist[i];
+                min_index = i;
+            }
+
+        return min_index;
+    }
+
+    private boolean containsEdge(int pos, int vertex) {
+        boolean found = false;
+
+        for (Pair edge : adjacency[pos])
+            if (edge.getKey().equals(vertex))
+                found = true;
+
+        return found;
+    }
 
 
+    public void pathfinder(int start, int end) {
 
-    public void pathfinder(int start, int end, boolean shortest) {
+        int length = adjacency.length;
+        int[] dist = new int[length];
+        boolean[] visited = new boolean[length];
+        //int[] previous = new int[adjacency.length];
+
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        Arrays.fill(visited, false);
+        //Arrays.fill(previous, -1);
         dist[start] = 0;
-        ArrayList<Integer> queue = new ArrayList<>();
 
+        // Find shortest path for all vertices
+        for (int count = 0; count < length ; count++)
+        {
+            // Pick the minimum distance vertex from the set of vertices
+            // not yet processed. u is always equal to start in first
+            // iteration.
+            int u = getMinDistNotVisited(dist, visited);
 
-        queue.add(start);
+            // Mark the picked vertex as processed
+            visited[u] = true;
 
+            // Update dist value of the adjacent vertices of the
+            // picked vertex.
+            for (int v = 0; v < length; v++)
 
-        /*
-        insert start into Q
+                // Update dist[v] only if is not in visited, there is an
+                // edge from u to v, and total weight of path from start to
+                // v through u is smaller than current value of dist[v]
+                if (containsEdge(v, u))
+                    if (!visited[v]
+                            && dist[u] != Integer.MAX_VALUE
+                            && dist[u] + adjacency[v].get(u).getValue() < dist[v])
+                        dist[v] = dist[u] + adjacency[v].get(u).getValue();
+        }
 
-        while Q is not empty
-            u := vertex smallest dist && !visited
-            remove u from Q
-            visited[u] := true
-
-            for each neighbour v of u
-                alt := dist[u] + dist(u, v)
-                if alt < dist[v]
-                    dist[v] := alt
-                    previous[v] := u
-                    if !visited[u]
-                        insert v into Q
-                    end if
-                end if
-            end for-each
-        end while
-        return dist...
-         */
+        dist.toString();
 
     }
 
@@ -145,8 +164,10 @@ public class Graph {
     }
 
     public static void main(String[] args) {
-        Graph graph = new Graph(10, 15);
+        Graph graph = new Graph(10, 25);
         graph.printAdjacencyList();
+
+        graph.pathfinder(0, 5);
     }
 
 }
