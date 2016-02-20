@@ -70,19 +70,17 @@ public class Ladders {
     public void getLadder(int start, int end)
     {
         Dijkstra pathfinder = new Dijkstra(graph, start, end);
-        pathfinder.findShortestPath(true);
-
-        int[] path = pathfinder.getPath();
+        pathfinder.findPath(true);
 
         System.out.println();
         System.out.printf("Path from \"%s\" to \"%s\":\n", graph.getLabel(start), graph.getLabel(end));
-        System.out.printf("%s ", graph.getLabel(start));
+        pathfinder.getPath().descendingIterator().forEachRemaining( element ->
+            System.out.printf("--> %s ", element)
+        );
 
-        for (int i = 1; i < path.length; i++)
-        {
-            if (path[i] == Integer.MAX_VALUE) return;
-            System.out.printf("--> %s ", graph.getLabel(path[i]));
-        }
+        System.out.println("--> " + graph.getLabel(end));
+        System.out.println();
+
     }
 
     private boolean differBy1(String a, String b)

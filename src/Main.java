@@ -23,7 +23,8 @@ public class Main {
         // Ladders Game:
         Ladders game = new Ladders("/Users/amaridev/Documents/IdeaProjects/Info2/Exercise7.1/src/sgb-words-2.txt");
 
-        game.getLadder("alone", "along");
+        game.getLadder("along", "salon");
+//        game.getLadder(game.getRandomVertex(), game.getRandomVertex());
 
     }
 

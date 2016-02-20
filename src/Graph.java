@@ -5,15 +5,13 @@ public class Graph {
     private int[][] adjList;
     private String[] labels;
 
-    public Graph(int dimension)
-    {
-        adjList = new int[dimension][dimension]; // Felder die Verlinkung haben K�NNTEN = -1
-        for (int i = 0; i < adjList.length; i++)
-        { // Felder die keine haben D�RFEN = 0
-            for (int j = 0; j < adjList[i].length; j++)
-            {
-                if (i != j)
-                {
+    public Graph(int dimension) {
+        adjList = new int[dimension][dimension]; // Felder die Verlinkung haben
+        // KÖNNTEN = -1
+        for (int i = 0; i < adjList.length; i++) { // Felder die keine haben
+            // DÜRFEN = 0
+            for (int j = 0; j < adjList[i].length; j++) {
+                if (i != j) {
                     adjList[i][j] = -1;
                 }
             }
@@ -22,15 +20,63 @@ public class Graph {
         labels = new String[dimension];
     }
 
-    public int[][] getAdjList()
-    {
+    public int[][] getAdjList() {
         return this.adjList;
     }
 
-    public void addEdge(int knotenAnfang, int knotenEnde, int weight)
-    {
-        adjList[knotenAnfang][knotenEnde] = weight;
-        adjList[knotenEnde][knotenAnfang] = weight;
+    public void addEdge(int nodeStart, int nodeEnd, int weight) {
+        adjList[nodeStart][nodeEnd] = weight;
+        adjList[nodeEnd][nodeStart] = weight;
+    }
+
+    public void printGraph() {
+        for (int i = 0; i < adjList.length; i++) {
+            System.out.println("Knoten " + i + " ist mit folgenden Knoten verbunden:");
+            for (int j = 0; j < adjList[i].length; j++) {
+                if (adjList[i][j] > 0) {
+                    System.out.print("Knoten " + j + " mit der Gewichtung " + adjList[i][j]);
+                    System.out.println();
+                }
+            }
+        }
+    }
+
+    public void printAsMatrix() {
+        for (int i = 0; i < adjList.length; i++) {
+            for (int j = 0; j < adjList[i].length; j++) {
+                System.out.print(adjList[i][j]);
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+    }
+
+    private void createGraph(int edgeCount) {
+        Random rnd = new Random();
+        for (int i = 0; i < edgeCount; i++) {
+            int nodeStart = rnd.nextInt(adjList.length);
+            int nodeEnd = rnd.nextInt(adjList.length);
+            int weight = rnd.nextInt(20) + 1;
+            while (adjList[nodeStart][nodeEnd] >= 0) {
+                nodeEnd = rnd.nextInt(adjList.length);
+                nodeStart = rnd.nextInt(adjList.length);
+            }
+            addEdge(nodeStart, nodeEnd, weight);
+        }
+    }
+
+    public int[] getNeighbors(int node){
+        int neighborCount = 0;
+        for(int i = 0; i < adjList[node].length; ++i)
+            if(adjList[node][i] > 0)
+                ++neighborCount;
+        int[] neighbours = new int[neighborCount];
+        neighborCount = 0;
+        for(int i = 0; i < adjList[node].length; ++i)
+            if(adjList[node][i] > 0)
+                neighbours[neighborCount++] = i;
+
+        return neighbours;
     }
 
     public void addLabel(int vertex, String name)
@@ -51,52 +97,4 @@ public class Graph {
         }
         return -1;
     }
-
-    public void printGraph()
-    {
-        for (int i = 0; i < adjList.length; i++)
-        {
-            System.out.println("Knoten " + i + " ist mit folgenden Knoten verbunden:");
-            for (int j = 0; j < adjList[i].length; j++)
-            {
-                if (adjList[i][j] > 0)
-                {
-                    System.out.print("Knoten " + j + " mit der Gewichtung " + adjList[i][j]);
-                    System.out.println();
-                }
-            }
-        }
-    }
-
-    public void printAsMatrix()
-    {
-        for (int i = 0; i < adjList.length; i++)
-        {
-            for (int j = 0; j < adjList[i].length; j++)
-            {
-                System.out.print(adjList[i][j]);
-                System.out.print("\t");
-            }
-            System.out.println();
-        }
-    }
-
-    private void createRandomGraph(int anzahlKanten)
-    {
-        Random rnd = new Random();
-        for (int i = 0; i < anzahlKanten; i++)
-        {
-            int knoten1 = rnd.nextInt(adjList.length);
-            int knoten2 = rnd.nextInt(adjList.length);
-            int gewicht = rnd.nextInt(20) + 1;
-            while (adjList[knoten1][knoten2] >= 0)
-            {
-                knoten2 = rnd.nextInt(adjList.length);
-                knoten1 = rnd.nextInt(adjList.length);
-            }
-            addEdge(knoten1, knoten2, gewicht);
-        }
-    }
-
-
 }
